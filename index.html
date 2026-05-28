@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>inteye // dev & vibes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg-elevated: #12121a;
+            --bg-card: #16162240;
+            --fg: #e0e0e8;
+            --fg-muted: #6b6b80;
+            --fg-dim: #3a3a50;
+            --accent: #00ffaa;
+            --accent-dim: #00ffaa22;
+            --accent-mid: #00ffaa66;
+            --warm: #ff6b35;
+            --warm-dim: #ff6b3522;
+            --cyan: #00d4ff;
+            --border: #1e1e2e;
+            --mono: 'JetBrains Mono', 'Menlo', monospace;
+            --sans: 'Space Grotesk', 'Noto Sans SC', system-ui, sans-serif;
+            --scanline: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 170, 0.015) 2px,
+                rgba(0, 255, 170, 0.015) 4px
+            );
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--fg-dim) var(--bg);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: var(--sans);
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: var(--scanline);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ===== NOISE OVERLAY ===== */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-label {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--fg-dim);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 1s ease 0.2s both;
+        }
+
+        .hero-label::before {
+            content: '> ';
+            color: var(--accent);
+        }
+
+        .hero-name {
+            font-family: var(--mono);
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            animation: glitch-in 0.8s ease 0.4s both;
+            position: relative;
+        }
+
+        .hero-name .accent {
+            color: var(--accent);
+            text-shadow: 0 0 30px var(--accent-dim);
+        }
+
+        .hero-tagline {
+            font-family: var(--mono);
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: var(--fg-muted);
+            font-weight: 300;
+            margin-bottom: 2.5rem;
+            animation: fadeIn 1s ease 0.8s both;
+        }
+
+        .hero-tagline .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em;
+            background: var(--accent);
+            margin-left: 4px;
+            vertical-align: text-bottom;
+            animation: blink 1s steps(1) infinite;
+        }
+
+        .hero-links {
+            display: flex;
+            gap: 1.5rem;
+            animation: fadeIn 1s ease 1.2s both;
+        }
+
+        .hero-links a {
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--fg-muted);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .hero-links a:hover {
+            color: var(--accent);
+            border-color: var(--accent-mid);
+            background: var(--accent-dim);
+            text-shadow: 0 0 10px var(--accent-dim);
+        }
+
+        .hero-links a::before {
+            content: '$ ';
+            color: var(--fg-dim);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--fg-dim);
+            letter-spacing: 0.2em;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .scroll-hint::after {
+            content: '';
+            display: block;
+            width: 1px;
+            height: 30px;
+            background: linear-gradient(to bottom, var(--fg-dim), transparent);
+            margin: 0.5rem auto 0;
+        }
+
+        /* ===== SECTIONS ===== */
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .section-number {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+        }
+
+        .section-title {
+            font-family: var(--mono);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--fg);
+        }
+
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--border), transparent);
+        }
+
+        /* ===== ABOUT ===== */
+        .about-text {
+            font-size: 1.05rem;
+            color: var(--fg);
+            max-width: 640px;
+            font-weight: 300;
+            line-height: 1.9;
+        }
+
+        .about-text strong {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.2rem;
+            margin-top: 2.5rem;
+        }
+
+        .about-stat {
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .about-stat:hover {
+            border-color: var(--accent-mid);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 255, 170, 0.05);
+        }
+
+        .about-stat .value {
+            font-family: var(--mono);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: block;
+        }
+
+        .about-stat .label {
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            margin-top: 0.3rem;
+            display: block;
+        }
+
+        /* ===== PROJECTS ===== */
+        .projects-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .project-card {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem 2rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            transition: all 0.35s ease;
+            cursor: default;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent-mid);
+            background: var(--bg-elevated);
+            transform: translateX(4px);
+            box-shadow: -4px 0 0 0 var(--accent);
+        }
+
+        .project-icon {
+            font-size: 1.6rem;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: var(--accent-dim);
+            flex-shrink: 0;
+        }
+
+        .project-body {
+            min-width: 0;
+        }
+
+        .project-name {
+            font-family: var(--mono);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--fg);
+            margin-bottom: 0.2rem;
+        }
+
+        .project-desc {
+            font-size: 0.85rem;
+            color: var(--fg-muted);
+            line-height: 1.5;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            justify-content: flex-end;
+            flex-shrink: 0;
+        }
+
+        .tag {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            color: var(--accent);
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--accent-dim);
+            border-radius: 2px;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        /* ===== TECH STACK ===== */
+        .tech-marquee {
+            overflow: hidden;
+            padding: 2rem 0;
+            position: relative;
+        }
+
+        .tech-track {
+            display: flex;
+            gap: 2rem;
+            animation: marquee 25s linear infinite;
+            width: max-content;
+        }
+
+        .tech-item {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--fg-dim);
+            padding: 0.5rem 1.2rem;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            color: var(--accent);
+            border-color: var(--accent-mid);
+        }
+
+        .tech-item .sep {
+            color: var(--fg-dim);
+            margin-left: 0.5rem;
+        }
+
+        /* ===== PHILOSOPHY ===== */
+        .philosophy {
+            position: relative;
+            padding: 3rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg-card);
+            overflow: hidden;
+        }
+
+        .philosophy::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-family: var(--mono);
+            font-size: 8rem;
+            color: var(--accent-dim);
+            line-height: 1;
+        }
+
+        .philosophy-text {
+            font-size: 1.15rem;
+            font-weight: 300;
+            line-height: 2;
+            position: relative;
+            z-index: 1;
+        }
+
+        .philosophy-text em {
+            color: var(--accent);
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        .philosophy-author {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--fg-dim);
+            margin-top: 1.5rem;
+            text-align: right;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-left {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--fg-dim);
+        }
+
+        .footer-left .accent {
+            color: var(--accent);
+        }
+
+        .footer-right {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-right a {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-right a:hover {
+            color: var(--accent);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-8px); }
+        }
+
+        @keyframes glitch-in {
+            0% {
+                opacity: 0;
+                transform: translateX(-20px);
+                text-shadow: -5px 0 var(--warm), 5px 0 var(--cyan);
+            }
+            30% {
+                opacity: 1;
+                text-shadow: -2px 0 var(--warm), 2px 0 var(--cyan);
+            }
+            60% {
+                text-shadow: -1px 0 var(--warm), 1px 0 var(--cyan);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+                text-shadow: none;
+            }
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ===== SCROLL REVEAL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            .container { padding: 0 1.2rem; }
+            .hero-name { font-size: clamp(2.2rem, 12vw, 3.5rem); }
+            .project-card {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1.2rem;
+            }
+            .project-icon { display: none; }
+            .project-tags { justify-content: flex-start; }
+            .about-grid { grid-template-columns: repeat(2, 1fr); }
+            .philosophy { padding: 2rem 1.5rem; }
+            footer { flex-direction: column; text-align: center; }
+        }
+
+        /* ===== SELECTION ===== */
+        ::selection {
+            background: var(--accent-mid);
+            color: var(--bg);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HERO ===== -->
+    <div class="container">
+        <section class="hero">
+            <div class="hero-label">inteye.github.io</div>
+            <h1 class="hero-name">
+                <span class="accent">inteye</span>
+            </h1>
+            <p class="hero-tagline">
+                build tools · ship open source · vibe coding<span class="cursor"></span>
+            </p>
+            <div class="hero-links">
+                <a href="https://github.com/inteye" target="_blank" rel="noopener">github</a>
+                <a href="https://github.com/inteye?tab=repositories" target="_blank" rel="noopener">repos</a>
+                <a href="webarchive-cards/" target="_blank" rel="noopener">extension</a>
+            </div>
+            <div class="scroll-hint">SCROLL</div>
+        </section>
+    </div>
+
+    <!-- ===== ABOUT ===== -->
+    <div class="container">
+        <section id="about">
+            <div class="section-header reveal">
+                <span class="section-number">01</span>
+                <h2 class="section-title">about</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="about-text reveal">
+                <p>
+                    IT 从业者，喜欢钻研技术，尤其对 <strong>AI</strong> 充满热情并长期看好。
+                    工作中沉淀实用工具，业余把奇思妙想落地成代码——全部以 <strong>开源</strong> 形式分享。
+                </p>
+                <p style="margin-top: 1rem;">
+                    闲暇时最爱 <strong>Vibe Coding</strong>：不为 KPI，不赶 deadline，
+                    纯粹因为「这东西做出来肯定有意思」而开干。Web 应用、App、自动化脚本、AI 实验品……什么都折腾。
+                </p>
+            </div>
+            <div class="about-grid reveal">
+                <div class="about-stat">
+                    <span class="value">∞</span>
+                    <span class="label">好奇心</span>
+                </div>
+                <div class="about-stat">
+                    <span class="value">Open</span>
+                    <span class="label">Source First</span>
+                </div>
+                <div class="about-stat">
+                    <span class="value">AI</span>
+                    <span class="label">Believer & Builder</span>
+                </div>
+                <div class="about-stat">
+                    <span class="value">Vibe</span>
+                    <span class="label">Coding Enthusiast</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== PROJECTS ===== -->
+    <div class="container">
+        <section id="projects">
+            <div class="section-header reveal">
+                <span class="section-number">02</span>
+                <h2 class="section-title">projects</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="projects-grid">
+
+                <div class="project-card reveal">
+                    <div class="project-icon">🔧</div>
+                    <div class="project-body">
+                        <div class="project-name">工作实用工具</div>
+                        <div class="project-desc">日常开发、运维、办公场景下的轻量化工具，从实际痛点出发，造轮子也造得讲究。</div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">CLI</span>
+                        <span class="tag">Automation</span>
+                        <span class="tag">Productivity</span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal">
+                    <div class="project-icon">🌐</div>
+                    <div class="project-body">
+                        <div class="project-name">Web 应用</div>
+                        <div class="project-desc">前端、全栈 Web 项目。从业务原型到独立产品，Demo 到可部署应用都有涉猎。</div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Frontend</span>
+                        <span class="tag">Fullstack</span>
+                        <span class="tag">SPA</span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal">
+                    <div class="project-icon">📱</div>
+                    <div class="project-body">
+                        <div class="project-name">App 应用</div>
+                        <div class="project-desc">移动端应用与客户端原型。跨平台、原生、小程序等多种形式的技术探索。</div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Mobile</span>
+                        <span class="tag">Cross-platform</span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal">
+                    <div class="project-icon">🤖</div>
+                    <div class="project-body">
+                        <div class="project-name">AI 应用 & 实验</div>
+                        <div class="project-desc">LLM 调用、RAG 实践、智能工具、Prompt Engineering——AI 不只是看看，要亲手做出来。</div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">LLM</span>
+                        <span class="tag">RAG</span>
+                        <span class="tag">Agent</span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal">
+                    <div class="project-icon">🧪</div>
+                    <div class="project-body">
+                        <div class="project-name">Chrome 扩展</div>
+                        <div class="project-desc">浏览器增强工具，让日常网页浏览更高效、更有趣。</div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Extension</span>
+                        <span class="tag">Browser</span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal">
+                    <div class="project-icon">✨</div>
+                    <div class="project-body">
+                        <div class="project-name">奇思妙想 & Vibe Coding</div>
+                        <div class="project-desc">灵感来了就写，不管有没有用。趣味代码实验、创意原型、纯好奇驱动的技术探索。</div>
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Vibe Coding</span>
+                        <span class="tag">Experiment</span>
+                        <span class="tag">Just for Fun</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== TECH STACK MARQUEE ===== -->
+    <div class="container">
+        <section>
+            <div class="section-header reveal">
+                <span class="section-number">03</span>
+                <h2 class="section-title">tech stack</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="tech-marquee reveal">
+                <div class="tech-track">
+                    <span class="tech-item">Python<span class="sep">·</span></span>
+                    <span class="tech-item">TypeScript<span class="sep">·</span></span>
+                    <span class="tech-item">React<span class="sep">·</span></span>
+                    <span class="tech-item">Vue<span class="sep">·</span></span>
+                    <span class="tech-item">Node.js<span class="sep">·</span></span>
+                    <span class="tech-item">Swift<span class="sep">·</span></span>
+                    <span class="tech-item">Flutter<span class="sep">·</span></span>
+                    <span class="tech-item">Docker<span class="sep">·</span></span>
+                    <span class="tech-item">LLM / RAG<span class="sep">·</span></span>
+                    <span class="tech-item">Prompt Engineering<span class="sep">·</span></span>
+                    <span class="tech-item">AI Agent<span class="sep">·</span></span>
+                    <span class="tech-item">GitHub Actions<span class="sep">·</span></span>
+                    <!-- duplicate for seamless loop -->
+                    <span class="tech-item">Python<span class="sep">·</span></span>
+                    <span class="tech-item">TypeScript<span class="sep">·</span></span>
+                    <span class="tech-item">React<span class="sep">·</span></span>
+                    <span class="tech-item">Vue<span class="sep">·</span></span>
+                    <span class="tech-item">Node.js<span class="sep">·</span></span>
+                    <span class="tech-item">Swift<span class="sep">·</span></span>
+                    <span class="tech-item">Flutter<span class="sep">·</span></span>
+                    <span class="tech-item">Docker<span class="sep">·</span></span>
+                    <span class="tech-item">LLM / RAG<span class="sep">·</span></span>
+                    <span class="tech-item">Prompt Engineering<span class="sep">·</span></span>
+                    <span class="tech-item">AI Agent<span class="sep">·</span></span>
+                    <span class="tech-item">GitHub Actions<span class="sep">·</span></span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== PHILOSOPHY ===== -->
+    <div class="container">
+        <section>
+            <div class="philosophy reveal">
+                <p class="philosophy-text">
+                    写代码不只是解决问题，更是一种<em>表达方式</em>。
+                    每一个开源项目都是一句「我觉得这事可以这么做」。
+                    AI 是当前最让人兴奋的变量——不是因为它能替代什么，而是因为它能让每个人<em>做到更多</em>。
+                    Vibe Coding 的精髓在于：享受过程，接受不完美，<em>先做出来再说</em>。
+                </p>
+                <p class="philosophy-author">— inteye</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="container">
+        <footer>
+            <div class="footer-left">
+                <span class="accent">©</span> 2025-2026 inteye · built with <span class="accent">vibes</span>
+            </div>
+            <div class="footer-right">
+                <a href="https://github.com/inteye" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://github.com/inteye?tab=repositories" target="_blank" rel="noopener">Repos</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        reveals.forEach(el => observer.observe(el));
+
+        // Stagger project cards
+        document.querySelectorAll('.project-card.reveal').forEach((card, i) => {
+            card.style.transitionDelay = `${i * 0.08}s`;
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+
+</body>
+</html>
