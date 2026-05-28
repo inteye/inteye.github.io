@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebArchive Cards - Save Web Pages as Organized Cards</title>
+  <meta name="description" content="Transform your web bookmarks into organized, searchable cards with smart tags and instant search. Replace your browser bookmarks with a better way to save.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233B82F6'/><rect x='15' y='15' width='70' height='70' rx='10' fill='white' opacity='0.3'/><rect x='25' y='25' width='20' height='20' rx='4' fill='white'/><rect x='55' y='25' width='20' height='20' rx='4' fill='white'/><rect x='25' y='55' width='20' height='20' rx='4' fill='white'/><rect x='55' y='55' width='20' height='20' rx='4' fill='white'/></svg>">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      line-height: 1.6;
+      color: #1f2937;
+      background: #ffffff;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid #e5e7eb;
+      z-index: 100;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #111827;
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: #3B82F6;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    nav a {
+      color: #6b7280;
+      text-decoration: none;
+      font-size: 15px;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: #111827;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #3B82F6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      background: #2563EB;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: white;
+      color: #374151;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background: #f9fafb;
+      border-color: #9ca3af;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 140px 0 100px;
+      background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
+    }
+
+    .hero-content {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      border-radius: 100px;
+      color: #1D4ED8;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #111827;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: #6b7280;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #9ca3af;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 100px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .section-header h2 {
+      font-size: 40px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 16px;
+    }
+
+    .section-header p {
+      font-size: 18px;
+      color: #6b7280;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: #93c5fd;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: #EFF6FF;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .feature-icon svg {
+      width: 24px;
+      height: 24px;
+      color: #3B82F6;
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 15px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    /* How It Works */
+    .how-it-works {
+      padding: 100px 0;
+      background: #f9fafb;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      margin-top: 64px;
+    }
+
+    .step {
+      text-align: center;
+    }
+
+    .step-number {
+      width: 48px;
+      height: 48px;
+      background: #3B82F6;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 auto 20px;
+    }
+
+    .step h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 12px;
+    }
+
+    .step p {
+      font-size: 15px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .step-visual {
+      margin-top: 24px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 24px;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-visual .icon-large {
+      width: 64px;
+      height: 64px;
+      color: #9ca3af;
+    }
+
+    /* Use Cases */
+    .use-cases {
+      padding: 100px 0;
+    }
+
+    .use-cases-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 64px;
+    }
+
+    .use-case-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .use-case-icon {
+      width: 48px;
+      height: 48px;
+      background: #F3E8FF;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .use-case-icon svg {
+      width: 24px;
+      height: 24px;
+      color: #7C3AED;
+    }
+
+    .use-case-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .use-case-card p {
+      font-size: 15px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    /* FAQ */
+    .faq {
+      padding: 100px 0;
+      background: #f9fafb;
+    }
+
+    .faq-list {
+      max-width: 800px;
+      margin: 64px auto 0;
+    }
+
+    .faq-item {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      padding: 20px 24px;
+      background: none;
+      border: none;
+      text-align: left;
+      font-size: 16px;
+      font-weight: 600;
+      color: #111827;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-question:hover {
+      background: #f9fafb;
+    }
+
+    .faq-question svg {
+      width: 20px;
+      height: 20px;
+      color: #9ca3af;
+      transition: transform 0.2s;
+    }
+
+    .faq-item.active .faq-question svg {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      padding: 0 24px 20px;
+      font-size: 15px;
+      color: #6b7280;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    /* CTA Section */
+    .cta {
+      padding: 100px 0;
+      background: linear-gradient(135deg, #1E40AF 0%, #7C3AED 100%);
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: 40px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .cta p {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta .btn-primary {
+      background: white;
+      color: #1E40AF;
+      font-size: 17px;
+      padding: 14px 28px;
+    }
+
+    .cta .btn-primary:hover {
+      background: #f0f0f0;
+    }
+
+    /* Footer */
+    footer {
+      padding: 64px 0 32px;
+      background: #111827;
+      color: #9ca3af;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand {
+      max-width: 300px;
+    }
+
+    .footer-brand .logo {
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 80px;
+    }
+
+    .footer-column h4 {
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .footer-column a {
+      display: block;
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 12px;
+      transition: color 0.2s;
+    }
+
+    .footer-column a:hover {
+      color: white;
+    }
+
+    .footer-bottom {
+      padding-top: 32px;
+      border-top: 1px solid #1f2937;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .footer-bottom a {
+      color: #9ca3af;
+      text-decoration: none;
+      margin-left: 24px;
+      transition: color 0.2s;
+    }
+
+    .footer-bottom a:hover {
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .hero p {
+        font-size: 17px;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .use-cases-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-content {
+        flex-direction: column;
+        gap: 48px;
+      }
+
+      .footer-links {
+        gap: 48px;
+      }
+
+      .section-header h2 {
+        font-size: 28px;
+      }
+
+      .cta h2 {
+        font-size: 28px;
+      }
+
+      nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container header-inner">
+      <a href="#" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="16" y="16" width="96" height="96" rx="8" fill="white" opacity="0.3"/>
+            <rect x="28" y="28" width="28" height="28" rx="6" fill="white"/>
+            <rect x="72" y="28" width="28" height="28" rx="6" fill="white"/>
+            <rect x="28" y="72" width="28" height="28" rx="6" fill="white"/>
+            <rect x="72" y="72" width="28" height="28" rx="6" fill="white"/>
+          </svg>
+        </div>
+        WebArchive Cards
+      </a>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#faq">FAQ</a>
+        <a href="#cta" class="btn-primary">Get Extension</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 1L10 5.5L15 6.2L11.5 9.6L12.4 14.6L8 12.2L3.6 14.6L4.5 9.6L1 6.2L6 5.5L8 1Z" fill="currentColor"/>
+          </svg>
+          Chrome Extension · AI-Powered
+        </div>
+        <h1>Save Web Pages as <span>Organized Cards</span></h1>
+        <p>Transform chaotic bookmarks into searchable, tagged cards. AI-powered tags and summaries help you find anything in seconds.</p>
+        <div class="hero-buttons">
+          <a href="https://chrome.google.com/webstore" class="btn-primary" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="12" cy="12" r="4"/>
+              <line x1="21.17" y1="8" x2="12" y2="8"/>
+              <line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
+              <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
+            </svg>
+            Install for Chrome
+          </a>
+          <a href="#how-it-works" class="btn-secondary">
+            Learn More
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-value">10x</div>
+            <div class="stat-label">Faster than bookmarks</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">AI</div>
+            <div class="stat-label">Smart tags & summaries</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Local data storage</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>Everything you need to organize the web</h2>
+        <p>Simple, powerful tools to save, organize, and find any web content you need.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <h3>One-Click Save</h3>
+          <p>Save any web page instantly with a click or keyboard shortcut (⌘+Shift+S). Content is automatically extracted.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #F3E8FF;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #7C3AED;">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h3>AI Smart Tags</h3>
+          <p>AI generates concise, relevant tags automatically. Supports OpenAI, DeepSeek, Qwen and more.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #ECFDF5;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #10B981;">
+              <path d="M4 6h16M4 12h16M4 18h7"/>
+            </svg>
+          </div>
+          <h3>AI Summary</h3>
+          <p>AI generates concise one-sentence summaries for each saved page. Toggle on/off as needed.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+          </div>
+          <h3>Instant Search</h3>
+          <p>Find any saved content in milliseconds. Search by title, tags, or content with smart indexing.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <line x1="3" y1="9" x2="21" y2="9"/>
+              <line x1="9" y1="21" x2="9" y2="9"/>
+            </svg>
+          </div>
+          <h3>Card View</h3>
+          <p>Beautiful card layout with thumbnails and summaries. Switch between grid and list views.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3>Batch Operations</h3>
+          <p>Select multiple cards to archive, delete, or tag at once. Import Chrome bookmarks with one click.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Section -->
+  <section class="ai-section" id="ai" style="padding: 100px 0; background: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%);">
+    <div class="container">
+      <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: rgba(255,255,255,0.1); border-radius: 100px; color: #A78BFA; font-size: 14px; font-weight: 500; margin-bottom: 24px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+          </svg>
+          Optional AI Features
+        </div>
+        <h2 style="font-size: 40px; font-weight: 700; color: white; margin-bottom: 16px;">
+          AI-Powered Organization
+        </h2>
+        <p style="font-size: 18px; color: rgba(255,255,255,0.7); margin-bottom: 48px;">
+          Enable AI to get smarter tags and summaries. Choose your preferred provider and toggle on/off anytime.
+        </p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 900px; margin: 0 auto;">
+        <div style="background: rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; text-align: center;">
+          <div style="font-size: 32px; margin-bottom: 12px;">🤖</div>
+          <div style="color: white; font-weight: 600; margin-bottom: 4px;">OpenAI</div>
+          <div style="color: rgba(255,255,255,0.6); font-size: 13px;">GPT-4o</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; text-align: center;">
+          <div style="font-size: 32px; margin-bottom: 12px;">🧠</div>
+          <div style="color: white; font-weight: 600; margin-bottom: 4px;">Anthropic</div>
+          <div style="color: rgba(255,255,255,0.6); font-size: 13px;">Claude 3.5</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; text-align: center;">
+          <div style="font-size: 32px; margin-bottom: 12px;">🔮</div>
+          <div style="color: white; font-weight: 600; margin-bottom: 4px;">DeepSeek</div>
+          <div style="color: rgba(255,255,255,0.6); font-size: 13px;">DeepSeek Chat</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; text-align: center;">
+          <div style="font-size: 32px; margin-bottom: 12px;">🌐</div>
+          <div style="color: white; font-weight: 600; margin-bottom: 4px;">Qwen</div>
+          <div style="color: rgba(255,255,255,0.6); font-size: 13px;">通义千问</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2>How It Works</h2>
+        <p>Get started in three simple steps. No account required.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Install Extension</h3>
+          <p>Add WebArchive Cards to Chrome from the Chrome Web Store. One click installation.</p>
+          <div class="step-visual">
+            <svg class="icon-large" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="12" cy="12" r="4"/>
+              <line x1="21.17" y1="8" x2="12" y2="8"/>
+              <line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
+              <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
+            </svg>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Save Pages</h3>
+          <p>Click the extension icon or press ⌘+Shift+S on any web page to save it as a card.</p>
+          <div class="step-visual">
+            <svg class="icon-large" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Find Anything</h3>
+          <p>Open the side panel to browse, search, and filter your saved cards instantly.</p>
+          <div class="step-visual">
+            <svg class="icon-large" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section class="use-cases" id="use-cases">
+    <div class="container">
+      <div class="section-header">
+        <h2>Built for Everyone</h2>
+        <p>Whether you're a researcher, developer, or content creator.</p>
+      </div>
+      <div class="use-cases-grid">
+        <div class="use-case-card">
+          <div class="use-case-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Researchers</h3>
+            <p>Save papers, articles, and references with automatic tagging. Find related content instantly when writing.</p>
+          </div>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Developers</h3>
+            <p>Save documentation, Stack Overflow answers, and GitHub repos. Never lose a useful resource again.</p>
+          </div>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20h9"/>
+              <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Content Creators</h3>
+            <p>Collect inspiration, references, and sources. Build a searchable library of creative assets.</p>
+          </div>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Students</h3>
+            <p>Save lecture notes, study materials, and research sources. Organize by subject with tags.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <h2>Frequently Asked Questions</h2>
+        <p>Everything you need to know about WebArchive Cards.</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item active">
+          <button class="faq-question">
+            Is WebArchive Cards free?
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            Yes! WebArchive Cards is completely free to use. All features including save, search, tags, and export are available at no cost. Your data is stored locally in your browser.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Where is my data stored?
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            All your data is stored locally in your browser using IndexedDB. Nothing is sent to external servers. You have full control over your data and can export it anytime.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Does it work on all websites?
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            WebArchive Cards works on most websites including news articles, blog posts, documentation, and more. It uses Mozilla's Readability technology to extract the main content from any page.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Can I import my existing bookmarks?
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            Yes! You can import your Chrome bookmarks directly into WebArchive Cards. They'll be automatically tagged as "bookmark" for easy identification.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            What browsers are supported?
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            Currently, WebArchive Cards is available for Chrome and Chromium-based browsers (Edge, Brave, etc.). Firefox and Safari support may be added in the future.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta" id="cta">
+    <div class="container">
+      <h2>Ready to organize your web?</h2>
+      <p>Join thousands of users who have replaced their bookmarks with a better way to save.</p>
+      <a href="https://chrome.google.com/webstore" class="btn-primary" target="_blank">
+        Install WebArchive Cards
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <div class="logo-icon">
+              <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="16" y="16" width="96" height="96" rx="8" fill="white" opacity="0.3"/>
+                <rect x="28" y="28" width="28" height="28" rx="6" fill="white"/>
+                <rect x="72" y="28" width="28" height="28" rx="6" fill="white"/>
+                <rect x="28" y="72" width="28" height="28" rx="6" fill="white"/>
+                <rect x="72" y="72" width="28" height="28" rx="6" fill="white"/>
+              </svg>
+            </div>
+            WebArchive Cards
+          </a>
+          <p>Save web pages as organized cards with smart tags and instant search.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-column">
+            <h4>Product</h4>
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#faq">FAQ</a>
+          </div>
+          <div class="footer-column">
+            <h4>Resources</h4>
+            <a href="#">Documentation</a>
+            <a href="#">Blog</a>
+            <a href="#">Support</a>
+          </div>
+          <div class="footer-column">
+            <h4>Legal</h4>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2024 WebArchive Cards. All rights reserved.</span>
+        <div>
+          <a href="#">GitHub</a>
+          <a href="#">Twitter</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ Toggle
+    document.querySelectorAll('.faq-question').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.parentElement;
+        item.classList.toggle('active');
+      });
+    });
+
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
