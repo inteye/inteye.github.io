@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="ReconPilot is a Chrome extension for AI-assisted reconciliation review, selector-based browser workflows, and Feishu document reporting."
+    />
+    <title>ReconPilot - AI Reconciliation Review for Chrome</title>
+    <link rel="icon" href="/icons/icon32.png" />
+    <link rel="apple-touch-icon" href="/icons/icon128.png" />
+    <link rel="stylesheet" crossorigin href="/assets/index.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="#" aria-label="ReconPilot home">
+          <img src="/icons/icon32.png" alt="" width="32" height="32" />
+          <span>ReconPilot</span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a href="#features">Features</a>
+          <a href="#workflow">Workflow</a>
+          <a href="#privacy">Privacy</a>
+          <a class="nav-cta" href="#chrome-store">Chrome Store</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-shade"></div>
+        <div class="container hero-content">
+          <div class="hero-badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3l2.3 5.3 5.7.5-4.3 3.7 1.3 5.5-5-2.9-5 2.9 1.3-5.5L4 8.8l5.7-.5L12 3z" />
+            </svg>
+            Chrome Extension · AI Assisted · Local First
+          </div>
+          <h1 id="hero-title">AI reconciliation review for any web workflow</h1>
+          <p>
+            Record the page elements that matter, let your LLM inspect structured evidence, confirm sensitive actions, and create a clean Feishu document report for every run.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#chrome-store">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M21.2 8H12M4 6.1 8.5 14M10.9 21.9 15.5 14"></path>
+              </svg>
+              Coming to Chrome Web Store
+            </a>
+            <a class="btn secondary" href="#workflow">
+              See workflow
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+          <div class="hero-stats" aria-label="Product highlights">
+            <div>
+              <strong>3</strong>
+              <span>recording modes</span>
+            </div>
+            <div>
+              <strong>JSON</strong>
+              <span>structured AI output</span>
+            </div>
+            <div>
+              <strong>1 doc</strong>
+              <span>per completed run</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="features" id="features">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow">Built for reconciliation operators</p>
+            <h2>Turn fragile page checks into repeatable AI-assisted runs</h2>
+            <p>ReconPilot keeps the human in control while removing repetitive reading, comparing, reporting, and handoff work.</p>
+          </div>
+          <div class="features-grid">
+            <article class="feature-card">
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 7h16M4 12h10M4 17h7"></path>
+                </svg>
+              </div>
+              <h3>Read selectors</h3>
+              <p>Capture tables, rows, invoice regions, images, attachments, and chart containers as reliable evidence for the model.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon accent-blue">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M15 15 21 21M10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"></path>
+                </svg>
+              </div>
+              <h3>Screenshot evidence</h3>
+              <p>Enable Screenshot on any Read selector to send visual context for charts, canvas views, images, and complex page states.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon accent-amber">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3v18M5 8h14M7 16h10"></path>
+                </svg>
+              </div>
+              <h3>Safe page actions</h3>
+              <p>Let the model propose Click/Input actions, then confirm each sensitive operation or switch to auto-approve once the flow is stable.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon accent-indigo">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"></path>
+                </svg>
+              </div>
+              <h3>Clean Feishu reports</h3>
+              <p>Create a fresh Feishu document for every run, with readable summaries, evidence, comparisons, decisions, and action outcomes.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 6h18M6 12h12M10 18h4"></path>
+                </svg>
+              </div>
+              <h3>Multi-task setup</h3>
+              <p>Save each reconciliation page as its own task, including page URL, steps, prompts, selectors, scheduling, and execution settings.</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon accent-blue">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3a4 4 0 0 1 4 4v1h1a4 4 0 0 1 0 8h-1v1a4 4 0 0 1-8 0v-1H7a4 4 0 0 1 0-8h1V7a4 4 0 0 1 4-4z"></path>
+                </svg>
+              </div>
+              <h3>Flexible model gateway</h3>
+              <p>Use common providers, local models, or a custom OpenAI-compatible gateway through llm-hub based configuration.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="showcase" id="workflow">
+        <div class="container showcase-grid">
+          <div>
+            <p class="eyebrow">Workflow</p>
+            <h2>Designed for long-running browser operations</h2>
+            <p>
+              ReconPilot runs steps in order. If a step needs confirmation, the next step waits until you approve or reject the proposed action.
+            </p>
+            <div class="workflow-list">
+              <div>
+                <span>1</span>
+                <p><strong>Record context.</strong> Use Read, Click, and Input to define what the model may inspect or operate.</p>
+              </div>
+              <div>
+                <span>2</span>
+                <p><strong>Analyze with AI.</strong> The model receives DOM snapshots, tables, screenshots, attachments, and your prompt.</p>
+              </div>
+              <div>
+                <span>3</span>
+                <p><strong>Confirm actions.</strong> Review proposed browser actions before they execute, or enable automatic approval.</p>
+              </div>
+              <div>
+                <span>4</span>
+                <p><strong>Sync the report.</strong> Generate a new Feishu document with the outcome, evidence, decisions, and errors.</p>
+              </div>
+            </div>
+          </div>
+          <figure class="product-preview">
+            <img src="/website/reconpilot-hero.png" alt="ReconPilot product preview showing a browser reconciliation page and extension side panel" width="1600" height="900" loading="lazy" />
+          </figure>
+        </div>
+      </section>
+
+      <section class="use-cases">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow">Use cases</p>
+            <h2>For teams that reconcile data inside real web systems</h2>
+            <p>Use ReconPilot anywhere you need structured page review plus auditable reporting.</p>
+          </div>
+          <div class="use-cases-grid">
+            <article class="use-case-card">
+              <div class="use-case-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 5h16v14H4zM4 10h16M9 5v14"></path>
+                </svg>
+              </div>
+              <div>
+                <h3>Bill and order review</h3>
+                <p>Compare page-visible amounts, status labels, IDs, images, and exception messages before taking review actions.</p>
+              </div>
+            </article>
+            <article class="use-case-card">
+              <div class="use-case-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 20V8M12 20V4M19 20v-9"></path>
+                </svg>
+              </div>
+              <div>
+                <h3>Chart and dashboard checks</h3>
+                <p>Capture visual evidence from charts with Read screenshots, then ask your model to explain trends or anomalies.</p>
+              </div>
+            </article>
+            <article class="use-case-card">
+              <div class="use-case-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M6 3h9l3 3v15H6zM14 3v4h4M9 12h6M9 16h6"></path>
+                </svg>
+              </div>
+              <div>
+                <h3>Document-backed evidence</h3>
+                <p>Let the extension collect image, text, and document metadata from the page and preserve findings in the final report.</p>
+              </div>
+            </article>
+            <article class="use-case-card">
+              <div class="use-case-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3v4M12 17v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M3 12h4M17 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"></path>
+                </svg>
+              </div>
+              <div>
+                <h3>Scheduled review routines</h3>
+                <p>Run configured tasks on Chrome alarms when the browser is open and the target system is already logged in.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="privacy" id="privacy">
+        <div class="container privacy-grid">
+          <div>
+            <p class="eyebrow">Local-first controls</p>
+            <h2>Private by design for operational work</h2>
+            <p>
+              ReconPilot is built as a local Chrome extension. Credentials are stored in Chrome extension storage on your machine, and external calls happen only to services you configure.
+            </p>
+          </div>
+          <div class="privacy-list">
+            <div>
+              <strong>No fixed business URL</strong>
+              <span>Run on any normal web page and save page-specific tasks as needed.</span>
+            </div>
+            <div>
+              <strong>Human confirmation</strong>
+              <span>Keep confirmation on while tuning prompts, then disable it when the workflow is trusted.</span>
+            </div>
+            <div>
+              <strong>Explicit integrations</strong>
+              <span>LLM gateways and Feishu document sync use the App ID, App Secret, API Key, and model settings you provide.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="faq" id="faq">
+        <div class="container">
+          <div class="section-header">
+            <p class="eyebrow">FAQ</p>
+            <h2>Questions before installing</h2>
+          </div>
+          <div class="faq-list">
+            <details>
+              <summary>Does ReconPilot work only on one website?</summary>
+              <p>No. It can run on any normal web page. Each saved task keeps its own page URL, steps, prompts, and selectors.</p>
+            </details>
+            <details>
+              <summary>Can the AI execute arbitrary JavaScript?</summary>
+              <p>No. The model returns structured JSON. ReconPilot only executes safe local action types such as click, input, wait, scroll, keyboard, and download.</p>
+            </details>
+            <details>
+              <summary>How does Feishu sync work?</summary>
+              <p>Each completed run can create a new Feishu document and write a clean Markdown-converted report. Sync can be turned off per settings.</p>
+            </details>
+            <details>
+              <summary>What if my model cannot analyze images?</summary>
+              <p>ReconPilot records screenshot and image metadata. If the chosen model or gateway rejects vision input, the result should be marked as needs_review instead of inventing visual facts.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="chrome-store" id="chrome-store">
+        <div class="container store-panel">
+          <div>
+            <p class="eyebrow">Chrome Web Store ready</p>
+            <h2>Prepare your team for guided reconciliation</h2>
+            <p>Use this page as the product homepage for the Chrome Store listing. Replace the CTA link after the store item is approved.</p>
+          </div>
+          <a class="btn store-btn" href="#" aria-label="Chrome Web Store link placeholder">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M21.2 8H12M4 6.1 8.5 14M10.9 21.9 15.5 14"></path>
+            </svg>
+            Store link coming soon
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <a class="logo footer-logo" href="#">
+            <img src="/icons/icon32.png" alt="" width="32" height="32" />
+            <span>ReconPilot</span>
+          </a>
+          <p>AI-assisted reconciliation review, browser action planning, and Feishu document reporting for Chrome.</p>
+        </div>
+        <div class="footer-links">
+          <div>
+            <h3>Product</h3>
+            <a href="#features">Features</a>
+            <a href="#workflow">Workflow</a>
+            <a href="#chrome-store">Chrome Store</a>
+          </div>
+          <div>
+            <h3>Trust</h3>
+            <a href="#privacy">Privacy</a>
+            <a href="#faq">FAQ</a>
+          </div>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <span>© 2026 ReconPilot. Built for local/private reconciliation workflows.</span>
+      </div>
+    </footer>
+  </body>
+</html>
