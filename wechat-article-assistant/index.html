@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>英台公众号排版助手 | WeChat Article Formatter</title>
+    <meta
+      name="description"
+      content="英台公众号排版助手是一款面向微信公众号创作者的 Chrome 扩展，支持 Markdown 编辑、公众号预览、模板排版、富文本复制和可选 AI 写作增强。"
+    />
+    <meta property="og:title" content="英台公众号排版助手" />
+    <meta property="og:description" content="Markdown 编辑、实时预览、模板美化、富文本复制和可选 AI 写作，让公众号排版更快完成。" />
+    <meta property="og:image" content="./images/promo-marquee-1400x560.png" />
+    <meta name="theme-color" content="#111827" />
+    <link rel="icon" href="./images/icon-128.png" />
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #111827;
+        --muted: #5f6f85;
+        --soft: #f4f8fc;
+        --line: #dbe6f2;
+        --blue: #2563eb;
+        --blue-dark: #1e40af;
+        --teal: #10b8a6;
+        --orange: #f97316;
+        --paper: #ffffff;
+        --radius: 18px;
+        --shadow: 0 20px 54px rgba(15, 23, 42, 0.14);
+        font-family:
+          Inter, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--soft);
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 20;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(15, 23, 42, 0.78);
+        backdrop-filter: blur(16px);
+      }
+
+      .nav-inner {
+        width: min(1160px, calc(100% - 40px));
+        min-height: 68px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        color: #fff;
+        font-weight: 800;
+        letter-spacing: 0;
+      }
+
+      .brand img {
+        width: 38px;
+        height: 38px;
+      }
+
+      .brand small {
+        display: block;
+        color: #93c5fd;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-links a {
+        min-height: 40px;
+        border-radius: 999px;
+        padding: 8px 12px;
+        display: inline-flex;
+        align-items: center;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .nav-links a:hover,
+      .nav-links a:focus-visible {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        outline: none;
+      }
+
+      .hero {
+        min-height: 720px;
+        padding: 132px 0 90px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        background:
+          linear-gradient(90deg, rgba(15, 23, 42, 0.96) 0%, rgba(15, 23, 42, 0.9) 38%, rgba(15, 23, 42, 0.36) 70%),
+          url("./images/promo-marquee-1400x560.png") center / cover no-repeat;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 110px;
+        background: linear-gradient(180deg, rgba(244, 248, 252, 0), var(--soft));
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        width: min(1160px, calc(100% - 40px));
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      .eyebrow {
+        margin: 0 0 18px;
+        color: #7dd3fc;
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: 760px;
+        margin-bottom: 22px;
+        color: #fff;
+        font-size: clamp(42px, 7vw, 82px);
+        line-height: 1.04;
+        letter-spacing: 0;
+      }
+
+      .hero-copy {
+        max-width: 640px;
+        margin-bottom: 34px;
+        color: rgba(255, 255, 255, 0.84);
+        font-size: 20px;
+        line-height: 1.75;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .button {
+        min-height: 48px;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        padding: 12px 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 15px;
+        font-weight: 800;
+      }
+
+      .button.primary {
+        background: var(--blue);
+        color: #fff;
+        box-shadow: 0 12px 26px rgba(37, 99, 235, 0.28);
+      }
+
+      .button.secondary {
+        border-color: rgba(255, 255, 255, 0.32);
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+      }
+
+      .button.light {
+        border-color: var(--line);
+        background: #fff;
+        color: var(--blue-dark);
+      }
+
+      .button.disabled {
+        cursor: default;
+        opacity: 0.72;
+        pointer-events: none;
+      }
+
+      .button:hover,
+      .button:focus-visible {
+        transform: translateY(-1px);
+        outline: 3px solid rgba(37, 99, 235, 0.22);
+        outline-offset: 3px;
+      }
+
+      .hero-stats {
+        margin-top: 62px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 180px));
+        gap: 14px;
+      }
+
+      .stat {
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 16px;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(12px);
+      }
+
+      .stat strong {
+        display: block;
+        color: #fff;
+        font-size: 22px;
+        line-height: 1.3;
+      }
+
+      .section {
+        padding: 90px 0;
+      }
+
+      .section.alt {
+        background: #fff;
+      }
+
+      .wrap {
+        width: min(1160px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      .section-head {
+        max-width: 760px;
+        margin-bottom: 34px;
+      }
+
+      .section-kicker {
+        margin-bottom: 10px;
+        color: var(--blue);
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      h2 {
+        margin-bottom: 14px;
+        color: #0f172a;
+        font-size: clamp(30px, 4vw, 46px);
+        line-height: 1.16;
+        letter-spacing: 0;
+      }
+
+      .section-head p {
+        color: var(--muted);
+        font-size: 18px;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .feature-card,
+      .workflow-card,
+      .note-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 24px;
+        background: #fff;
+        box-shadow: 0 1px 0 rgba(15, 23, 42, 0.03);
+      }
+
+      .feature-icon {
+        width: 42px;
+        height: 42px;
+        margin-bottom: 18px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: #eff6ff;
+        color: var(--blue-dark);
+        font-weight: 900;
+      }
+
+      .feature-card h3,
+      .workflow-card h3,
+      .note-card h3 {
+        margin-bottom: 8px;
+        color: #0f172a;
+        font-size: 20px;
+        line-height: 1.35;
+      }
+
+      .feature-card p,
+      .workflow-card p,
+      .note-card p {
+        margin-bottom: 0;
+        color: var(--muted);
+      }
+
+      .showcase {
+        display: grid;
+        grid-template-columns: 1.12fr 0.88fr;
+        gap: 28px;
+        align-items: start;
+      }
+
+      .showcase-main {
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: #fff;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .showcase-main img {
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+      }
+
+      .showcase-side {
+        display: grid;
+        gap: 16px;
+      }
+
+      .screenshot-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 12px;
+        background: #fff;
+        display: grid;
+        grid-template-columns: 148px 1fr;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .screenshot-card img {
+        width: 148px;
+        height: 92px;
+        border-radius: 12px;
+        object-fit: cover;
+        border: 1px solid #e5edf6;
+      }
+
+      .screenshot-card strong {
+        display: block;
+        margin-bottom: 3px;
+        color: #0f172a;
+      }
+
+      .screenshot-card span {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .workflow {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        counter-reset: step;
+      }
+
+      .workflow-card {
+        position: relative;
+        min-height: 210px;
+      }
+
+      .workflow-card::before {
+        counter-increment: step;
+        content: counter(step);
+        width: 36px;
+        height: 36px;
+        margin-bottom: 18px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        background: #0f172a;
+        color: #fff;
+        font-weight: 900;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      .note-card {
+        background: #fbfdff;
+      }
+
+      .note-list {
+        margin: 14px 0 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 10px;
+        color: var(--muted);
+      }
+
+      .note-list li {
+        display: grid;
+        grid-template-columns: 22px 1fr;
+        gap: 8px;
+      }
+
+      .note-list li::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        margin-top: 10px;
+        border-radius: 999px;
+        background: var(--teal);
+      }
+
+      .install-band {
+        border-radius: 28px;
+        padding: 38px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 24px;
+        align-items: center;
+        background: #111827;
+        color: #fff;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .install-band::after {
+        content: "";
+        position: absolute;
+        right: -80px;
+        top: -100px;
+        width: 300px;
+        height: 300px;
+        border-radius: 999px;
+        background: rgba(37, 99, 235, 0.34);
+      }
+
+      .install-band h2,
+      .install-band p,
+      .install-band .actions {
+        position: relative;
+        z-index: 1;
+      }
+
+      .install-band h2 {
+        color: #fff;
+      }
+
+      .install-band p {
+        max-width: 680px;
+        color: rgba(255, 255, 255, 0.76);
+      }
+
+      footer {
+        padding: 36px 0;
+        background: #0f172a;
+        color: rgba(255, 255, 255, 0.68);
+      }
+
+      .footer-inner {
+        width: min(1160px, calc(100% - 40px));
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .footer-inner a {
+        color: #bfdbfe;
+      }
+
+      @media (max-width: 900px) {
+        .nav-inner {
+          min-height: 62px;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .hero {
+          min-height: 680px;
+          padding-top: 112px;
+        }
+
+        .hero-stats,
+        .feature-grid,
+        .workflow,
+        .two-col,
+        .showcase,
+        .install-band {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-stats {
+          max-width: 360px;
+        }
+
+        .screenshot-card {
+          grid-template-columns: 120px 1fr;
+        }
+
+        .screenshot-card img {
+          width: 120px;
+          height: 76px;
+        }
+
+        .section {
+          padding: 70px 0;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .hero,
+        .section {
+          padding-left: 0;
+          padding-right: 0;
+        }
+
+        h1 {
+          font-size: 42px;
+        }
+
+        .hero-copy {
+          font-size: 17px;
+        }
+
+        .actions {
+          width: 100%;
+        }
+
+        .button {
+          width: 100%;
+        }
+
+        .screenshot-card {
+          grid-template-columns: 1fr;
+        }
+
+        .screenshot-card img {
+          width: 100%;
+          height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav" aria-label="主导航">
+      <div class="nav-inner">
+        <a class="brand" href="#top" aria-label="英台公众号排版助手首页">
+          <img src="./images/icon-128.png" width="38" height="38" alt="" />
+          <span>
+            英台公众号排版助手
+            <small>Yingtai WeChat Article Assistant</small>
+          </span>
+        </a>
+        <div class="nav-links">
+          <a href="#features">功能</a>
+          <a href="#showcase">截图</a>
+          <a href="#workflow">流程</a>
+          <a href="#privacy">隐私</a>
+          <a href="#install">安装</a>
+        </div>
+      </div>
+    </nav>
+
+    <main id="top">
+      <section class="hero" aria-label="英台公众号排版助手介绍">
+        <div class="hero-inner">
+          <p class="eyebrow">Markdown · Preview · Templates · Optional AI</p>
+          <h1>把草稿变成适合发布的公众号文章</h1>
+          <p class="hero-copy">
+            英台公众号排版助手是一款面向中文创作者的 Chrome 扩展。用左侧 Markdown 写作，中间实时预览，右侧一键套用模板和微调样式，最后复制富文本到微信公众号编辑器。
+          </p>
+          <div class="actions">
+            <a class="button primary" href="#install">获取扩展</a>
+            <a class="button secondary" href="#showcase">查看界面</a>
+          </div>
+          <div class="hero-stats" aria-label="核心能力">
+            <div class="stat"><strong>3 栏工作台</strong>原文、预览、样式并排处理</div>
+            <div class="stat"><strong>多套模板</strong>快速生成公众号排版风格</div>
+            <div class="stat"><strong>本地优先</strong>AI 可选，排版不依赖模型</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="features">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="section-kicker">WHAT IT DOES</p>
+            <h2>围绕公众号文章排版的真实流程设计</h2>
+            <p>不是又一个泛用笔记工具，而是把写作、模板、预览、复制富文本这些发布前动作放进同一个工作台。</p>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card">
+              <div class="feature-icon">MD</div>
+              <h3>Markdown 原文编辑</h3>
+              <p>支持标题、段落、引用、列表、表格、图片、分隔线和围栏代码块，保留代码换行与注释。</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">样</div>
+              <h3>全文模板与微调</h3>
+              <p>一键切换全文模板，再按需微调字号、行高、间距、配色、图片圆角、表格和代码块。</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">预</div>
+              <h3>公众号效果预览</h3>
+              <p>中间预览区作为最终排版真相，所有样式变化先在插件内确认，再复制到微信编辑器。</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">码</div>
+              <h3>IDE 风格代码块</h3>
+              <p>内置 Mac 浅色、Mac 暗色、Xcode 蓝和终端黑屏等代码块外观，适合技术类公众号文章。</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">AI</div>
+              <h3>可选 AI 写作增强</h3>
+              <p>配置模型后可进行主题撰写、选区改写、润色优化和 AI 辅助排版，结果采用前必须确认。</p>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">贴</div>
+              <h3>复制富文本发布</h3>
+              <p>将清洗后的 HTML 作为富文本复制到剪贴板，粘贴到微信公众号编辑器后再做最终检查。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="showcase">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="section-kicker">PRODUCT PREVIEW</p>
+            <h2>从默认示例到最终排版，关键状态都可见</h2>
+            <p>默认打开就有一篇示例文章，展示标题、引用、表格、图片、代码块和 AI 写作流程，帮助新用户快速理解能力边界。</p>
+          </div>
+          <div class="showcase">
+            <figure class="showcase-main">
+              <img
+                src="./images/screenshot-1-full-page.png"
+                width="640"
+                height="400"
+                alt="英台公众号排版助手三栏工作台截图"
+              />
+            </figure>
+            <div class="showcase-side">
+              <a class="screenshot-card" href="./images/screenshot-2-ide-style.png">
+                <img src="./images/screenshot-2-ide-style.png" width="148" height="92" loading="lazy" alt="" />
+                <span><strong>代码块预设</strong>让技术文章里的代码更像 IDE 编辑器，减少粘贴后格式混乱。</span>
+              </a>
+              <a class="screenshot-card" href="./images/screenshot-4-precise.png">
+                <img src="./images/screenshot-4-precise.png" width="148" height="92" loading="lazy" alt="" />
+                <span><strong>全局微调</strong>字号、配色、间距、引用、列表、图片和表格都可以快速调整。</span>
+              </a>
+              <a class="screenshot-card" href="./images/screenshot-5-built-in.png">
+                <img src="./images/screenshot-5-built-in.png" width="148" height="92" loading="lazy" alt="" />
+                <span><strong>内置示例文章</strong>第一次打开就能看到完整功能展示，不需要从空白页摸索。</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="workflow">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="section-kicker">WORKFLOW</p>
+            <h2>四步完成一篇公众号文章的基础排版</h2>
+            <p>核心路径尽量短，详细设置只在需要微调时展开。</p>
+          </div>
+          <div class="workflow">
+            <article class="workflow-card">
+              <h3>写入原文</h3>
+              <p>在左侧粘贴草稿或继续使用 Markdown 写作，保留文章结构。</p>
+            </article>
+            <article class="workflow-card">
+              <h3>选择模板</h3>
+              <p>从多套全文模板中选一个接近目标气质的风格。</p>
+            </article>
+            <article class="workflow-card">
+              <h3>检查预览</h3>
+              <p>在中间预览区检查标题层级、段距、图片、表格和代码块。</p>
+            </article>
+            <article class="workflow-card">
+              <h3>复制发布</h3>
+              <p>复制富文本，粘贴到微信公众号编辑器中，发布前再做最后确认。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="privacy">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="section-kicker">AI & PRIVACY</p>
+            <h2>AI 是增强能力，不是排版前提</h2>
+            <p>没有配置 AI 时，模板排版、预览、微调和富文本复制仍然完整可用。</p>
+          </div>
+          <div class="two-col">
+            <article class="note-card">
+              <h3>可选 AI 写作</h3>
+              <p>配置自己的 API Key、Token Plan 或本地模型后，可以使用主题撰写、局部改写、润色优化和 AI 辅助排版。</p>
+              <ul class="note-list">
+                <li>AI 结果先进入确认卡片，不会直接覆盖正文。</li>
+                <li>已配置但关闭 AI 时，会提示用户手动启用。</li>
+                <li>本地模型可通过 localhost 或 127.0.0.1 端点连接。</li>
+              </ul>
+            </article>
+            <article class="note-card">
+              <h3>本地优先存储</h3>
+              <p>模板、设置、写作偏好和模型配置保存在 Chrome 扩展本地存储中。只有用户主动启用 AI 功能时，相关内容才会发送给用户配置的模型服务。</p>
+              <ul class="note-list">
+                <li>不提供独立后端服务。</li>
+                <li>复制富文本前会清理工具栏和扩展 UI 节点。</li>
+                <li>用户需要对最终发布内容进行人工确认。</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="install">
+        <div class="wrap">
+          <div class="install-band">
+            <div>
+              <p class="section-kicker">GET STARTED</p>
+              <h2>打开工作台，先从内置示例文章试一遍</h2>
+              <p>
+                扩展面向微信公众号编辑页自动显示入口，也支持点击扩展按钮手动打开排版工作台。Chrome Web Store 链接发布后可替换到这里。
+              </p>
+            </div>
+            <div class="actions">
+              <a class="button primary disabled" href="#" aria-disabled="true">Google 插件市场（即将上线）</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <span>© 2026 英台公众号排版助手</span>
+        <span>
+          Built for WeChat Official Account creators ·
+          <a href="https://github.com/inteye" target="_blank">Github</a>
+        </span>
+      </div>
+    </footer>
+  </body>
+</html>
