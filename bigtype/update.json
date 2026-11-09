@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "packageName": "com.bigtype.toolkit",
+  "versionCode": 16,
+  "versionName": "0.7.4",
+  "minSdk": 26,
+  "releaseNotes": "新增手动在线更新：在“关于我们”中检查新版本，查看更新说明后自行决定是否下载。\n下载时显示进度，支持取消和失败重试；安装前检查文件完整性、应用版本及签名。\n安装仍由手机系统确认，不自动安装、不强制更新。\n日历、便签、离线语音和家人二维码设置等原有功能继续在本机运行。\n修复家人二维码首次接收图片时偶发的读取中断。",
+  "assets": [
+    {
+      "abi": "arm64-v8a",
+      "url": "https://github.com/inteye/inteye.github.io/releases/download/bigtype-v0.7.4/bigtype-0.7.4-arm64.apk",
+      "size": 40221570,
+      "sha256": "fa3202e5bd01b215db7306b79084b8886d2b0662bca17be16da27d86816c6d88"
+    },
+    {
+      "abi": "armeabi-v7a",
+      "url": "https://github.com/inteye/inteye.github.io/releases/download/bigtype-v0.7.4/bigtype-0.7.4-armv7.apk",
+      "size": 39405690,
+      "sha256": "ee7120bd2a987547ed4402f95bc7ae70225a1525b20257ac11b4cde92d7b2578"
+    }
+  ]
+}
