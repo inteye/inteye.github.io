@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.bigtype.toolkit",
+      "sha256_cert_fingerprints": [
+        "BA:FB:61:50:77:0F:41:04:44:46:56:E7:9C:4B:BB:A8:BF:CB:3D:1B:92:EB:4D:C1:B0:16:82:2E:BF:F0:95:FC"
+      ]
+    }
+  }
+]
