@@ -1,22 +1,22 @@
 {
   "schemaVersion": 1,
   "packageName": "com.bigtype.toolkit",
-  "versionCode": 17,
-  "versionName": "0.7.5",
+  "versionCode": 18,
+  "versionName": "0.7.6",
   "minSdk": 26,
-  "releaseNotes": "新增手动在线更新：在“关于我们”中检查新版本，查看更新说明后自行决定是否下载。\n下载时显示进度，支持取消和失败重试；安装前检查文件完整性、应用版本及签名。\n安装仍由手机系统确认，不自动安装、不强制更新。\n日历、便签、离线语音和家人二维码设置等原有功能继续在本机运行。\n修复家人二维码首次接收图片时偶发的读取中断。",
+  "releaseNotes": "本次更新重点修复首页空白问题，简化求助操作，并限制计算器的输入与结果范围。\n\n修复首页空白问题\n\n修复从工具页面返回首页后，快速点击“大字工具”标题可能进入空白页、无法返回的问题。连续返回或点击标题后，仍可正常使用首页并打开其他工具。\n\n求助更直接、更安静\n\n- 倒计时由30秒缩短为 15秒，不再语音播报。\n- 已设置SOS联系人时，倒计时结束后直接发起呼叫，无需再次选择联系人或在拨号盘确认。\n- 优先拨打第一个可用SOS号码；第一个未填写时使用第二个，不会自动连拨多个号码。\n- 保存SOS号码或确认导入家人设置时，提前申请电话权限；保存设置本身不会拨号。\n- 未设置SOS号码时，直接显示当地紧急救助电话选项。\n- 支持取消求助；倒计时期间返回或进入后台后，不会继续发起呼叫。恢复界面也不会重复拨号。\n\n计算器输入与显示优化\n\n- 每个数最多输入 12位数字、6位小数，长算式超过限制时提示分步计算。\n- 结果使用普通数字显示，最多保留12位有效数字、6位小数，不使用科学计数。\n- 结果过大或过小时，明确提示调整数字后重算，保留原算式便于修改。\n- 改进小数计算精度，支持负数结果继续参与运算，保留打折和斤转公斤功能。",
   "assets": [
     {
       "abi": "arm64-v8a",
-      "url": "https://github.com/inteye/inteye.github.io/releases/download/bigtype-v0.7.5/bigtype-0.7.5-arm64.apk",
-      "size": 40225938,
-      "sha256": "4a917bb4ba947fc6856cab2bceffd36edba3a0fbcd99c81dde588d66c4a90539"
+      "url": "https://github.com/inteye/inteye.github.io/releases/download/bigtype-v0.7.6/bigtype-0.7.6-arm64.apk",
+      "size": 40246202,
+      "sha256": "3f8876dd7ce030c70fe23e66a6924c771967eb2d3f3064c981250881f3ec7baf"
     },
     {
       "abi": "armeabi-v7a",
-      "url": "https://github.com/inteye/inteye.github.io/releases/download/bigtype-v0.7.5/bigtype-0.7.5-armv7.apk",
-      "size": 39410058,
-      "sha256": "462dbafaf8fde83aa8221fa145549bad26de90721fccb25b3a6c6158c919ca0b"
+      "url": "https://github.com/inteye/inteye.github.io/releases/download/bigtype-v0.7.6/bigtype-0.7.6-armv7.apk",
+      "size": 39430322,
+      "sha256": "61840e55ea5d8c161f445a36cfe36ded5eba518fe790be0a0e132d0baa93e747"
     }
   ]
 }
